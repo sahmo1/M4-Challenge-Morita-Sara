@@ -3,6 +3,8 @@ package com.example.utilityapi.controller;
 import com.example.utilityapi.models.Account;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -23,7 +25,7 @@ public class AccountController {
 
     @RequestMapping(value = "/account", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public Account createAccount(@RequestBody Account account) {
+    public Account createAccount(@RequestBody @Valid Account account) {
 
         account.setId(idCounter++);
         accountList.add(account);
@@ -43,7 +45,7 @@ public class AccountController {
                 account.setUsername(account.getUsername());
             }
         }
-        //TESTING
+
 
         return account;
     }

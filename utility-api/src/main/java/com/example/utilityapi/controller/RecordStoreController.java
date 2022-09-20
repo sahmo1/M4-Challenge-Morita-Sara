@@ -3,6 +3,7 @@ package com.example.utilityapi.controller;
 import com.example.utilityapi.models.Record;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class RecordStoreController {
 
     @RequestMapping(value = "/records/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public Record getRecordById(@PathVariable @Valid int id) {
+    public Record getRecordById(@PathVariable int id) {
 
         Record foundRecord = null;
 
@@ -45,9 +46,16 @@ public class RecordStoreController {
                 break;
             }
             //gracefully handles input of non-existent Record ID.
+            /*
             else if (record.getId() != id) {
                 throw new IllegalArgumentException("Record ID does not exist");
             }
+
+             */
+        }
+
+        if (foundRecord == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Record does not exist");
         }
         return foundRecord;
     }

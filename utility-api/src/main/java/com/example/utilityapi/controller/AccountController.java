@@ -3,6 +3,7 @@ package com.example.utilityapi.controller;
 import com.example.utilityapi.models.Account;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -27,25 +28,19 @@ public class AccountController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public Account createAccount(@RequestBody @Valid Account account) {
 
-        account.setId(idCounter++);
-        accountList.add(account);
-
         //newly created password is capped at 10 characters. if not, throw exception
         if (account.getPassword().length() > 10) {
-            throw new IllegalArgumentException("Password must be less than 10 characters");
-        }
-        else if (account.getPassword().length() <= 10) {
-            account.setPassword(account.getPassword());
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"password is capped at 10 characters.");
         }
         //Duplicate usernames are prevented for newly created accounts and is handled gracefully otherwise
         for (Account a : accountList) {
             if (a.getUsername().equals(account.getUsername())) {
-                throw new IllegalArgumentException("Username already exists");
-            } else if (!a.getUsername().equals(account.getUsername())) {
-                account.setUsername(account.getUsername());
+                throw new ResponseStatusException(HttpStatus.CONFLICT,"Duplicate username");
             }
         }
 
+        account.setId(idCounter++);
+        accountList.add(account);
 
         return account;
     }

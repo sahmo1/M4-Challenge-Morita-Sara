@@ -1,5 +1,6 @@
 package com.example.utilityapi.models;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 
 public class Record {
@@ -7,6 +8,7 @@ public class Record {
     private String artist;
     private String album;
     private String year;
+    @NotEmpty(message = "You must have a valid ID")
     private int id;
 
     public Record() { }

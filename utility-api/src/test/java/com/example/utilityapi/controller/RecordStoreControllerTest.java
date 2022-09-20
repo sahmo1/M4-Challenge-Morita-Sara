@@ -74,6 +74,6 @@ public class RecordStoreControllerTest {
 
         mockMvc.perform(get("/records/999999"))
                 .andDo(print())
-                .andExpect(status().is4xxClientError()); //TASK 1: handles input of non-existent Record ID
+                .andExpect(status().is4xxClientError());
     }
 }
